@@ -1,0 +1,115 @@
+#include<Servo.h>
+
+Servo myservo;
+
+int nut1 = 11;
+int nut2 = 12;
+int pos = 90;
+int n1 = 8;
+int n2 = 10;
+int n3 = 13;
+int in1 = 6;
+int in2 = 5;
+int in3 = 4;
+int in4 = 3;
+int ena = 7;
+int enb = 2;
+
+void setup() 
+{
+  pinMode(nut1,INPUT_PULLUP);
+  pinMode(nut2,INPUT_PULLUP);  
+  myservo.attach(9);
+  myservo.write(pos);
+  
+  pinMode(n1,INPUT_PULLUP);
+  pinMode(n2,INPUT_PULLUP); 
+  pinMode(n3,INPUT_PULLUP); 
+
+  pinMode(in1,OUTPUT);
+  pinMode(in2,OUTPUT);
+  pinMode(in3,OUTPUT);
+  pinMode(in4,OUTPUT);
+  pinMode(ena,OUTPUT);
+  pinMode(enb,OUTPUT);
+}
+
+void left()
+{
+  digitalWrite(in1,HIGH);
+  digitalWrite(in2,LOW);
+  digitalWrite(ena,HIGH);
+}
+
+void right()
+{
+  digitalWrite(in3,HIGH);
+  digitalWrite(in4,LOW);
+  digitalWrite(enb,HIGH);
+}
+
+void straight()
+{
+  left();
+  right();
+}
+
+void stopMotors()
+{
+  // Hãm cả 2 motor
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, HIGH);
+  digitalWrite(ena, HIGH);
+  digitalWrite(enb, HIGH);
+}
+
+void quaytrai()
+{
+  if (pos > 0)
+  {
+    pos++;
+    myservo.write(pos);
+    delay(20);
+  }
+}
+
+void quayphai()
+{
+   if (pos <= 180)
+  {
+    pos--;
+    myservo.write(pos);
+    delay(20);
+  }
+}
+
+void loop()
+  {
+// servo
+  if(digitalRead(nut1) == 0){
+    quaytrai();
+  }                      
+  else if(digitalRead(nut2)==0){
+    quayphai();
+  }
+
+// l298
+
+  if(digitalRead(n1) == 0)
+  {
+    left();
+  }
+  
+  else if(digitalRead(n2) == 0)
+  {
+    right();
+  }
+  
+  else if(digitalRead(n3) == 0)
+  {
+    straight();
+  }else stopMotors();
+} 
+
